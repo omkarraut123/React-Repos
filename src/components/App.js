@@ -8,11 +8,13 @@ import ErrrComponent from './ErrrComponent';
 import Main from './MainComponent';
 
 
+
 class App extends Component {
 
   render() {
     return (
       <div className="App">
+        
    
       <Router>
         <Routes>
@@ -29,7 +31,7 @@ class App extends Component {
 
 
         {/* <Main /> */}
-      
+     
       </div>
     );
   }

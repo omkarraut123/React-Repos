@@ -2,9 +2,41 @@ import React, { useState } from 'react';
 import { Button } from 'reactstrap';
 import { NavLink } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
-
+import { Modal } from "react-bootstrap";
+import { Form } from 'react-bootstrap';
+import { userNames } from '../shared/usernames';
 const HomeComponent = () => {
+    const [show, setShow] = useState(false);
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState('');
+    const [isUser,setUser] = useState(false);
+    console.log(userNames);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     let navigate = useNavigate();
+
+    function validate(event){
+        event.preventDefault();
+        console.log(email+" "+password);
+
+       userNames.forEach(user => {
+           if(user.email == email && user.password == password){
+               setUser(true);
+           }
+       });
+
+        if(isUser){
+            window.location.replace("http://localhost:3000/");
+        }
+        else{
+            alert("Creadentials are Invalid...!");
+            setEmail('');
+            setPassword('');
+        }
+
+
+    }
+ 
     return (
         <div>
            <div className='container'>
@@ -28,9 +60,11 @@ const HomeComponent = () => {
                         </a> </div>
                     <div className="mt-3">
                         <p className="mb-0 text-muted">Already have an account?</p>
-                        <div className="btn btn-primary" onClick={()=>
+                        {/* <div className="btn btn-primary" onClick={()=>
                             navigate("/login")
-                        }>Log in<span className="fas fa-chevron-right ms-1"></span></div>
+                        }>Log in<span className="fas fa-chevron-right ms-1"></span></div> */}
+                        <div className="btn btn-primary" onClick={handleShow}>Log in<span className="fas fa-chevron-right ms-1"></span></div>
+                        
                     </div>
                 </div>
             </div>
@@ -40,6 +74,42 @@ const HomeComponent = () => {
         </div> <span className="fas fa-times"></span>
            </div>
             </div> 
+
+<Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Login</Modal.Title>
+        </Modal.Header>
+ <Modal.Body>
+    <Form onSubmit={validate}>
+    <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        <Form.Text className="text-muted">
+      We'll never share your email with anyone else.
+        </Form.Text>
+    </Form.Group>
+
+  <Form.Group className="mb-3" controlId="formBasicPassword">
+    <Form.Label>Password</Form.Label>
+    <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+  </Form.Group>
+
+  <Button variant="primary" >
+    Login
+  </Button>
+</Form>
+
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+            
            
         </div>
     );
